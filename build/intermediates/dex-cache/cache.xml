@@ -3,15 +3,6 @@
 
     <item
         is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_ab9e2902f8b095b1115a5d5f2ecc628e2335f29c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
@@ -30,24 +21,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_e5c54b39d3ecddd629c38f76dfbd870efe7afa7a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_7bdcbd3308ec2d89baf3b597f031a69192c85c73/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ZZANG/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta1/constraint-layout-solver-1.0.0-beta1.jar"
         jumboMode="true"
         optimize="true"
@@ -63,33 +36,6 @@
         revision="24.0.3"
         sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
         <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.2.1_0b73be84c97236a09fcb49689d6a3a6e4bd4d682/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="2279e5d43a8bcd940977ccd62e6b8f00e034a025">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_5b7d2575c79d61a3860ebe428bb10269b5c45f33/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_f1bf75dbbd72491d8c0124065512ef24ef4f8b12/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_65c970db826e9f8dd86cc11b05a52923b7e85723/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -120,24 +66,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_15ed9e695f77894b0036db25060bfcfa1ec51d25/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_758de0559009df9502ca43688c758950c8e82bbc/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
@@ -156,6 +84,159 @@
     </item>
     <item
         is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_26c5f43b9a7640b942c0dc52baea49e5b25a6d34/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_7ca9a927c157c71f619bb20e345ac5ef3d949eb7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_31505f90c0c6af201dbc70ba850d5934e0940e3a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_b4106831dc0c9f609a8f9243bbc6b95e3b5f76b0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_03cd0c22d710503f7c2c1909f3275c45f16c0a96/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_7b11445707ff51dd0ff0f3714a141ad4420b7c7b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_529b2f9593cf4fb0bb5001589127d47e9b63e0b1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="21b7bcf442f2ed6e502ced3bbac33932424b5bba">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2dc848a5d98ca12fd4c0f55e555fe28315c77dfd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_fa89fd2766bbbe9bbea9ab4010fbc0c3f1e7ea28/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_ab9e2902f8b095b1115a5d5f2ecc628e2335f29c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_e5c54b39d3ecddd629c38f76dfbd870efe7afa7a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_7bdcbd3308ec2d89baf3b597f031a69192c85c73/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94226f1f9a373f3759d348c153c6c2602e9667b1">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_5b7d2575c79d61a3860ebe428bb10269b5c45f33/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_f1bf75dbbd72491d8c0124065512ef24ef4f8b12/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_65c970db826e9f8dd86cc11b05a52923b7e85723/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_15ed9e695f77894b0036db25060bfcfa1ec51d25/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_758de0559009df9502ca43688c758950c8e82bbc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
@@ -171,15 +252,6 @@
         revision="24.0.3"
         sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
         <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_b1246a6a224f81d6a21eeca3648c28095b91356b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_26c5f43b9a7640b942c0dc52baea49e5b25a6d34/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -207,15 +279,6 @@
         revision="24.0.3"
         sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
         <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_6b203e5771308b49685dbed4aea8746551c1dfd7/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="867dad63c33388ff8c7644b236579355036d075f">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_7ca9a927c157c71f619bb20e345ac5ef3d949eb7/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -268,17 +331,8 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="d8446b2b95b8fbd7f9dc7c3497945c9c52cfd995">
+        sha1="c0bb117843b9724a0c51f192ffb2b474668b2147">
         <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_f6842dc616237c49fb384a7049bd4c710838c599/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_31505f90c0c6af201dbc70ba850d5934e0940e3a/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -291,33 +345,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_b4106831dc0c9f609a8f9243bbc6b95e3b5f76b0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_03cd0c22d710503f7c2c1909f3275c45f16c0a96/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_7b11445707ff51dd0ff0f3714a141ad4420b7c7b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
@@ -327,39 +354,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_529b2f9593cf4fb0bb5001589127d47e9b63e0b1/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="21b7bcf442f2ed6e502ced3bbac33932424b5bba">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2dc848a5d98ca12fd4c0f55e555fe28315c77dfd/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/ZZANG/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
         sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
         <dex dex="/Users/ZZANG/AndroidStudioProjects/GoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_47c25c0ad28c4be07323515f49181a086c0d06f3/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/Users/ZZANG/AndroidStudioProjects/AndroidGoBang/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_fa89fd2766bbbe9bbea9ab4010fbc0c3f1e7ea28/classes.dex" />
     </item>
 
 </items>
