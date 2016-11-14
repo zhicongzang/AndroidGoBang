@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class  MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
         textViewWiFiBattle.setOnTouchListener(new MenuTouchListener() {
             @Override
             public void touchUpHandle(View v) {
-                Toast.makeText(getApplicationContext(), textViewWiFiBattle.getText(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, BoardActivity.class);
+                intent.putExtra("Mode","WiFi");
+                intent.putExtra("OPPiece", 2);
+                startActivity(intent);
             }
         });
 

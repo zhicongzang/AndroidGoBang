@@ -2,32 +2,30 @@ package com.example.zzang.gobang;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zzang.gobang.controls.BoardView;
 import com.example.zzang.gobang.model.AI;
 import com.example.zzang.gobang.model.Board;
+import com.example.zzang.gobang.model.BoardAgent;
 import com.example.zzang.gobang.model.ChessType;
 import com.example.zzang.gobang.model.Position;
 
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
-public class BoardActivity extends AppCompatActivity {
+
+public class BoardActivity extends AppCompatActivity implements Observer {
 
     private Board boardData = new Board();
     private BoardView boardView;
@@ -40,8 +38,9 @@ public class BoardActivity extends AppCompatActivity {
     private Timer timer = new Timer();
     private AlertDialog.Builder winAlertDialogBulider;
 
-    private AI ai;
-    private boolean hasAI = false;
+    private BoardAgent agent;
+    private boolean hasAgent = false;
+
 
 
 
@@ -78,28 +77,49 @@ public class BoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String mode = intent.getStringExtra("Mode");
-        if(mode != null) {
+        if (mode != null) {
             switch (mode) {
                 case "VSAI":
-                    int piece = intent.getIntExtra("AIPiece",2);
-                    int level = intent.getIntExtra("AILevel",2);
-                    ai = new AI(piece, level);
-                    hasAI = true;
+                    int aiPiece = intent.getIntExtra("AIPiece", 2);
+                    int aiLevel = intent.getIntExtra("AILevel", 2);
+                    agent = new AI(aiPiece, aiLevel, this);
+                    hasAgent = true;
                     break;
-                case "Battle":
+                case "WiFi":
+                    int piece = intent.getIntExtra("OPPiece", 2);
+                    agent = new TestTCPConnention(piece, this);
+                    hasAgent = true;
                     break;
                 default:
                     break;
             }
         }
 
-        reset();
+        // Test Anent
+        if (hasAgent) {
+            Button testAgentButton = (Button) findViewById(R.id.testAgentButton);
+            testAgentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    agent.testRandomNextPosition();
+                }
+            });
+        }
 
+        reset();
     }
 
-    public boolean addChessToBoard(Position position) {
+    public void addChessToBoard(Position position) {
         Log.d("asd", "col: " + String.valueOf(position.getCol()) + " row: " + String.valueOf(position.getRow()));
-        return boardData.addChess(position);
+        if (boardData.addChess(position)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    boardView.invalidate();
+                }
+            });
+            checkWin();
+        }
     }
 
     public LinkedList<Position> getWhiteChessPositionsFromBoardData() {
@@ -130,7 +150,7 @@ public class BoardActivity extends AppCompatActivity {
     private void reset() {
         timer.cancel();
         boardData.reset();
-        boardView.invalidate();
+        boardView.postInvalidate();
         blackSecondsCounter.reset();
         whiteSecondsCounter.reset();
         blackTimeTextView.setText(blackSecondsCounter.toString());
@@ -139,37 +159,61 @@ public class BoardActivity extends AppCompatActivity {
         timer.schedule(new UpdateTimeTextViewTimerTask(blackTimeTextView, blackSecondsCounter), 1000, 1000);
         whiteImageView.setVisibility(View.INVISIBLE);
         blackImageView.setVisibility(View.VISIBLE);
-        if(hasAI && ai.getChessType().equals(ChessType.BLACK)) {
+        if (hasAgent && agent.getChessType().equals(ChessType.BLACK)) {
             boardView.blockTouchEvent();
         }
     }
 
     private void changeSide() {
-        if(hasAI) {
-            if(ai.getChessType().equals(boardData.getChessType())) {
+        if (hasAgent) {
+            if (agent.getChessType().equals(boardData.getChessType())) {
                 boardView.blockTouchEvent();
             } else {
                 boardView.handleTouchEvent();
             }
         }
-        switch (boardData.getChessType()) {
-            case WHITE:
-                timer = new Timer();
-                timer.schedule(new UpdateTimeTextViewTimerTask(whiteTimeTextView, whiteSecondsCounter),500,1000);
-                whiteImageView.setVisibility(View.VISIBLE);
-                blackImageView.setVisibility(View.INVISIBLE);
-                break;
-            case BLACK:
-                timer = new Timer();
-                timer.schedule(new UpdateTimeTextViewTimerTask(blackTimeTextView, blackSecondsCounter),500,1000);
-                blackImageView.setVisibility(View.VISIBLE);
-                whiteImageView.setVisibility(View.INVISIBLE);
-                break;
-            default:
-                break;
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (boardData.getChessType()) {
+                    case WHITE:
+                        timer.cancel();
+                        timer = new Timer();
+                        timer.schedule(new UpdateTimeTextViewTimerTask(whiteTimeTextView, whiteSecondsCounter), 500, 1000);
+                        whiteImageView.setVisibility(View.VISIBLE);
+                        blackImageView.setVisibility(View.INVISIBLE);
+                        break;
+                    case BLACK:
+                        timer.cancel();
+                        timer = new Timer();
+                        timer.schedule(new UpdateTimeTextViewTimerTask(blackTimeTextView, blackSecondsCounter), 500, 1000);
+                        blackImageView.setVisibility(View.VISIBLE);
+                        whiteImageView.setVisibility(View.INVISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (boardData.addChess(agent.getNextPosition())) {
+            agent.releaseNextPosition();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    boardView.invalidate();
+                }
+            });
+            checkWin();
+        } else {
+            agent.calculateNewNextPosition();
+        }
+
+    }
 
 
     class SecondsCounter {
@@ -178,10 +222,6 @@ public class BoardActivity extends AppCompatActivity {
 
         public SecondsCounter() {
             seconds = 0;
-        }
-
-        public SecondsCounter(int seconds) {
-            this.seconds = seconds;
         }
 
         public void reset() {

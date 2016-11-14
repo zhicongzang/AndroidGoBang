@@ -74,10 +74,7 @@ public class BoardView extends View {
         float x = event.getX();
         float y = event.getY();
         if(!isBlockTouchEvent) {
-            if(boardActivity.addChessToBoard(new Position(getChessCol(x), getChessRow(y)))) {
-                invalidate();
-                boardActivity.checkWin();
-            }
+            boardActivity.addChessToBoard(new Position(getChessCol(x), getChessRow(y)));
         } else {
             Toast.makeText(getContext(),"Please wait...", Toast.LENGTH_SHORT).show();
         }
@@ -87,17 +84,12 @@ public class BoardView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        try {
-            for (Position position: boardActivity.getWhiteChessPositionsFromBoardData()) {
-                canvas.drawBitmap(whiteChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
-            }
-            for (Position position: boardActivity.getBlackChessPositionsFromBoardData()) {
-                canvas.drawBitmap(blackChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (Position position: boardActivity.getWhiteChessPositionsFromBoardData()) {
+            canvas.drawBitmap(whiteChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
         }
-
+        for (Position position: boardActivity.getBlackChessPositionsFromBoardData()) {
+            canvas.drawBitmap(blackChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
+        }
 
     }
 
@@ -116,5 +108,6 @@ public class BoardView extends View {
     public void handleTouchEvent() {
         isBlockTouchEvent = false;
     }
+
 
 }
