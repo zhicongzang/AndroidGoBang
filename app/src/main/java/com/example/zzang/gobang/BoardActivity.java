@@ -215,6 +215,13 @@ public class BoardActivity extends AppCompatActivity implements Observer {
 
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        if (agent instanceof TestTCPConnention) {
+            ((TestTCPConnention) agent).close();
+        }
+    }
 
     class SecondsCounter {
 

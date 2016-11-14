@@ -32,6 +32,7 @@ public class TestTCPConnention extends BoardAgent {
 
     private ServerSocket serverSocket;
     private boolean isListening = false;
+    private Socket socket;
 
     private ChessType chessType;
 
@@ -57,9 +58,12 @@ public class TestTCPConnention extends BoardAgent {
             @Override
             public void run() {
                 try {
-                    Socket socket = serverSocket.accept();
-                    ObjectInputStream oos = new ObjectInputStream(socket.getInputStream());
-                    Position position = new Position((String) oos.readObject());
+                    Socket sendSocket = new Socket("192.168.1.101", 22222);
+                    ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+                    oos.writeObject("co:10:row:5");
+                    socket = serverSocket.accept();
+                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                    Position position = new Position((String) ois.readObject());
                     Log.d("WiFi", "position: " + position.toString());
                     setNextPosition(position);
                     stopListening();
@@ -77,6 +81,17 @@ public class TestTCPConnention extends BoardAgent {
             return;
         }
         isListening = false;
+    }
+    public void close() {
+        stopListening();
+        try {
+            if (!socket.isClosed()) {
+                socket.close();
+            }
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
