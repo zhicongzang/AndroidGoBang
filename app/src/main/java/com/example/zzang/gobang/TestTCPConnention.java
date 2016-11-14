@@ -12,6 +12,7 @@ import com.example.zzang.gobang.model.Position;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observer;
@@ -58,9 +59,6 @@ public class TestTCPConnention extends BoardAgent {
             @Override
             public void run() {
                 try {
-                    Socket sendSocket = new Socket("192.168.1.101", 22222);
-                    ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
-                    oos.writeObject("co:10:row:5");
                     socket = serverSocket.accept();
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                     Position position = new Position((String) ois.readObject());
