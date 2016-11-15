@@ -64,8 +64,8 @@ public class BoardView extends View {
         chessWidth = lineWidth;
         whiteChessBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stone_white),chessWidth,chessWidth,true);
         blackChessBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stone_black),chessWidth,chessWidth,true);
-    }
 
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
