@@ -46,4 +46,15 @@ public class Position implements Serializable {
         col = Integer.parseInt(ss[1]);
         row = Integer.parseInt(ss[3]);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Position) {
+            Position p = (Position) obj;
+            if (col == p.getCol() && row == p.getRow()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

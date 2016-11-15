@@ -4,11 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -16,9 +13,13 @@ import android.widget.Toast;
 import com.example.zzang.gobang.BoardActivity;
 import com.example.zzang.gobang.R;
 import com.example.zzang.gobang.model.Board;
+import com.example.zzang.gobang.model.ChessType;
 import com.example.zzang.gobang.model.Position;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+
 
 /**
  * Created by ZZANG on 11/1/16.
@@ -28,15 +29,20 @@ public class BoardView extends View {
 
     private Paint paint = new Paint();
 
-    private BoardActivity boardActivity;
+    private Board boardData = new Board();
+    private List<Position> blackChesses = new LinkedList<>();
+    private List<Position> whiteChesses = new LinkedList<>();
     private int boardWidth;
     private int lineWidth;
     private int borderWidth;
     private int chessWidth;
     private Bitmap whiteChessBitmap;
     private Bitmap blackChessBitmap;
+    private ChessType chessType = ChessType.BLACK;
+    private int isWin = 0;
 
     private boolean isBlockTouchEvent = false;
+    private BoardActivity boardActivity;
 
     public BoardView(Context context) {
         super(context);
@@ -74,7 +80,7 @@ public class BoardView extends View {
         float x = event.getX();
         float y = event.getY();
         if(!isBlockTouchEvent) {
-            boardActivity.addChessToBoard(new Position(getChessCol(x), getChessRow(y)));
+            addChessToBoard(new Position(getChessCol(x), getChessRow(y)));
         } else {
             Toast.makeText(getContext(),"Please wait...", Toast.LENGTH_SHORT).show();
         }
@@ -83,12 +89,11 @@ public class BoardView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        for (Position position: boardActivity.getWhiteChessPositionsFromBoardData()) {
-            canvas.drawBitmap(whiteChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
-        }
-        for (Position position: boardActivity.getBlackChessPositionsFromBoardData()) {
+        for (Position position: blackChesses) {
             canvas.drawBitmap(blackChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
+        }
+        for (Position position: whiteChesses) {
+            canvas.drawBitmap(whiteChessBitmap, borderWidth + position.getCol() * lineWidth - chessWidth / 2, borderWidth + position.getRow() * lineWidth - chessWidth / 2, paint);
         }
 
     }
@@ -101,6 +106,21 @@ public class BoardView extends View {
         return Math.round((y - (float)borderWidth) / (float)lineWidth);
     }
 
+    public void addChessToBoard(Position position) {
+        if (boardData.addChess(position, chessType)) {
+            if(chessType.ordinal() == ChessType.BLACK.ordinal()) {
+                blackChesses.add(position);
+                chessType = ChessType.WHITE;
+            } else {
+                whiteChesses.add(position);
+                chessType = ChessType.BLACK;
+            }
+            invalidate();
+            isWin = boardData.checkWin();
+            boardActivity.checkWin(isWin, chessType);
+        }
+    }
+
     public void blockTouchEvent() {
         isBlockTouchEvent = true;
     }
@@ -108,6 +128,16 @@ public class BoardView extends View {
     public void handleTouchEvent() {
         isBlockTouchEvent = false;
     }
+
+    public void reset() {
+        isWin = 0;
+        chessType = ChessType.BLACK;
+        boardData.reset();
+        blackChesses = new LinkedList<>();
+        whiteChesses = new LinkedList<>();
+        invalidate();
+    }
+
 
 
 }

@@ -1,5 +1,7 @@
 package com.example.zzang.gobang.model;
 
+import android.util.Log;
+
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
@@ -49,15 +51,17 @@ public abstract class BoardAgent extends Observable {
     }
 
     public void testRandomNextPosition() {
-        Thread t = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                int col = random.nextInt() % 15;
-                int row = random.nextInt() % 15;
-                setNextPosition(new Position(col, row));
+                int col = random.nextInt(14);
+                int row = random.nextInt(14);
+                Position p = new Position(col, row);
+                Log.d("Pos", "testRandomNextPosition: "+ p.toString());
+                setNextPosition(p);
             }
-        });
-        t.start();
+        }).start();
+
     }
 
 }

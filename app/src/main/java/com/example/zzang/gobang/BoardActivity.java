@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,12 +12,9 @@ import android.widget.TextView;
 
 import com.example.zzang.gobang.controls.BoardView;
 import com.example.zzang.gobang.model.AI;
-import com.example.zzang.gobang.model.Board;
 import com.example.zzang.gobang.model.BoardAgent;
 import com.example.zzang.gobang.model.ChessType;
-import com.example.zzang.gobang.model.Position;
 
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
@@ -27,7 +23,6 @@ import java.util.TimerTask;
 
 public class BoardActivity extends AppCompatActivity implements Observer {
 
-    private Board boardData = new Board();
     private BoardView boardView;
     private TextView blackTimeTextView;
     private TextView whiteTimeTextView;
@@ -109,47 +104,24 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         reset();
     }
 
-    public void addChessToBoard(Position position) {
-        Log.d("asd", "col: " + String.valueOf(position.getCol()) + " row: " + String.valueOf(position.getRow()));
-        if (boardData.addChess(position)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    boardView.invalidate();
-                }
-            });
-            checkWin();
-        }
-    }
 
-    public LinkedList<Position> getWhiteChessPositionsFromBoardData() {
-        return boardData.getWhiteChessPositions();
-    }
 
-    public LinkedList<Position> getBlackChessPositionsFromBoardData() {
-        return boardData.getBlackChessPositions();
-    }
-
-    public void checkWin() {
+    public void checkWin(int isWin, ChessType newChessType) {
         timer.cancel();
-        switch (boardData.isWin()) {
-            case WHITE:
-                winAlertDialogBulider.setMessage("White Win!");
-                winAlertDialogBulider.create().show();
-                break;
-            case BLACK:
-                winAlertDialogBulider.setMessage("Black Win!");
-                winAlertDialogBulider.create().show();
-                break;
-            default:
-                changeSide();
-                break;
+        if (isWin == ChessType.BLACK.ordinal()) {
+            winAlertDialogBulider.setMessage("White Win!");
+            winAlertDialogBulider.create().show();
+        } else if (isWin == ChessType.WHITE.ordinal()) {
+            winAlertDialogBulider.setMessage("Black Win!");
+            winAlertDialogBulider.create().show();
+        } else {
+            changeSide(newChessType);
         }
     }
 
     private void reset() {
         timer.cancel();
-        boardData.reset();
+        boardView.reset();
         boardView.postInvalidate();
         blackSecondsCounter.reset();
         whiteSecondsCounter.reset();
@@ -164,55 +136,44 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    private void changeSide() {
+
+    private void changeSide(ChessType newChessType) {
         if (hasAgent) {
-            if (agent.getChessType().equals(boardData.getChessType())) {
+            if (agent.getChessType().equals(newChessType)) {
                 boardView.blockTouchEvent();
             } else {
                 boardView.handleTouchEvent();
             }
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                switch (boardData.getChessType()) {
-                    case WHITE:
-                        timer.cancel();
-                        timer = new Timer();
-                        timer.schedule(new UpdateTimeTextViewTimerTask(whiteTimeTextView, whiteSecondsCounter), 500, 1000);
-                        whiteImageView.setVisibility(View.VISIBLE);
-                        blackImageView.setVisibility(View.INVISIBLE);
-                        break;
-                    case BLACK:
-                        timer.cancel();
-                        timer = new Timer();
-                        timer.schedule(new UpdateTimeTextViewTimerTask(blackTimeTextView, blackSecondsCounter), 500, 1000);
-                        blackImageView.setVisibility(View.VISIBLE);
-                        whiteImageView.setVisibility(View.INVISIBLE);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        switch (newChessType) {
+            case WHITE:
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(new UpdateTimeTextViewTimerTask(whiteTimeTextView, whiteSecondsCounter), 100, 1000);
+                whiteImageView.setVisibility(View.VISIBLE);
+                blackImageView.setVisibility(View.INVISIBLE);
+                break;
+            case BLACK:
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(new UpdateTimeTextViewTimerTask(blackTimeTextView, blackSecondsCounter), 100, 1000);
+                blackImageView.setVisibility(View.VISIBLE);
+                whiteImageView.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                break;
+        }
     }
 
 
     @Override
     public void update(Observable o, Object arg) {
-        if (boardData.addChess(agent.getNextPosition())) {
-            agent.releaseNextPosition();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    boardView.invalidate();
-                }
-            });
-            checkWin();
-        } else {
-            agent.calculateNewNextPosition();
-        }
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                boardView.addChessToBoard(agent.getNextPosition());
+            }
+        });
     }
 
     @Override
@@ -244,7 +205,6 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         }
 
         private String secondsToString() {
-            String str = "";
             int hour = 0;
             int min = 0;
             int sec = 0;
