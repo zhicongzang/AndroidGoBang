@@ -15,7 +15,7 @@ public abstract class BoardAgent extends Observable {
     protected ChessType chessType;
     protected Position nextPosition;
 
-    private Random random = new Random();
+    protected Random random = new Random();
 
     public BoardAgent(int piece, Observer o) {
         if(piece == ChessType.BLACK.ordinal()) {
@@ -51,17 +51,11 @@ public abstract class BoardAgent extends Observable {
     }
 
     public void testRandomNextPosition() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int col = random.nextInt(14);
-                int row = random.nextInt(14);
-                Position p = new Position(col, row);
-                Log.d("Pos", "testRandomNextPosition: "+ p.toString());
-                setNextPosition(p);
-            }
-        }).start();
-
+        int col = random.nextInt(14);
+        int row = random.nextInt(14);
+        Position p = new Position(col, row);
+        Log.d("Pos", "testRandomNextPosition: "+ p.toString());
+        setNextPosition(p);
     }
 
 }

@@ -39,10 +39,8 @@ public class BoardView extends View {
     private Bitmap whiteChessBitmap;
     private Bitmap blackChessBitmap;
     private ChessType chessType = ChessType.BLACK;
-    private int isWin = 0;
 
     private boolean isBlockTouchEvent = false;
-    private BoardActivity boardActivity;
 
     public BoardView(Context context) {
         super(context);
@@ -57,7 +55,7 @@ public class BoardView extends View {
     }
 
     public void setup(BoardActivity boardActivity) {
-        this.boardActivity = boardActivity;
+        boardData.addObserver(boardActivity);
         boardWidth = getWidth();
         lineWidth = (int) ((float)boardWidth / (22*2 + 30*14) *30);
         borderWidth = (int) ((float)boardWidth / (22*2 + 30*14) *22);
@@ -116,8 +114,7 @@ public class BoardView extends View {
                 chessType = ChessType.BLACK;
             }
             invalidate();
-            isWin = boardData.checkWin();
-            boardActivity.checkWin(isWin, chessType);
+            boardData.checkWin();
         }
     }
 
@@ -130,7 +127,6 @@ public class BoardView extends View {
     }
 
     public void reset() {
-        isWin = 0;
         chessType = ChessType.BLACK;
         boardData.reset();
         blackChesses = new LinkedList<>();
@@ -138,6 +134,11 @@ public class BoardView extends View {
         invalidate();
     }
 
+    public ChessType getChessType() {
+        return chessType;
+    }
 
-
+    public Board getBoardData() {
+        return boardData;
+    }
 }

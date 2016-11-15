@@ -1,9 +1,12 @@
 package com.example.zzang.gobang.model;
 
 
+
+import java.util.Observable;
+
 import static com.example.zzang.gobang.model.ChessType.*;
 
-public class Board {
+public class Board extends Observable {
 
     //col , row
     private int[][] boardData;
@@ -36,13 +39,19 @@ public class Board {
         return true;
     }
 
+    public boolean checkPositionValid(Position position) {
+        return checkPositionValid(position.getCol(),position.getRow());
+    }
+
 
     public void reset() {
         boardData = new int[15][15];
     }
 
 
-    public int checkWin() {
+
+
+    public void checkWin() {
         int col = lastPosition.getCol();
         int row = lastPosition.getRow();
         int chessType = boardData[col][row];
@@ -50,9 +59,11 @@ public class Board {
                 ||checkRow(chessType, col, row)
                 ||checkLeftTop(chessType, col, row)
                 ||checkLeftBottom(chessType, col, row)) {
-            return chessType;
+            setChanged();
+            notifyObservers(chessType);
         }
-        return EMPTY.ordinal();
+        setChanged();
+        notifyObservers(ChessType.EMPTY.ordinal());
     }
 
     private boolean checkColumn(int type, int col, int row) {
@@ -179,4 +190,15 @@ public class Board {
         return false;
     }
 
+    public Position getLastPosition() {
+        return lastPosition;
+    }
+
+    public int getType(int col, int row) {
+        return boardData[col][row];
+    }
+
+    public int getType(Position position) {
+        return boardData[position.getCol()][position.getRow()];
+    }
 }

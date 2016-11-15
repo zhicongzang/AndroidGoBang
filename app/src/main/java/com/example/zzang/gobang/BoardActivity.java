@@ -2,9 +2,6 @@ package com.example.zzang.gobang;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.zzang.gobang.controls.BoardView;
 import com.example.zzang.gobang.model.AI;
+import com.example.zzang.gobang.model.Board;
 import com.example.zzang.gobang.model.BoardAgent;
 import com.example.zzang.gobang.model.ChessType;
 
@@ -38,9 +36,6 @@ public class BoardActivity extends AppCompatActivity implements Observer {
 
     private BoardAgent agent;
     private boolean hasAgent = false;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +75,7 @@ public class BoardActivity extends AppCompatActivity implements Observer {
                 case "VSAI":
                     int aiPiece = intent.getIntExtra("AIPiece", 2);
                     int aiLevel = intent.getIntExtra("AILevel", 2);
-                    agent = new AI(aiPiece, aiLevel, this);
+                    agent = new AI(aiPiece, aiLevel, boardView.getBoardData(), this);
                     hasAgent = true;
                     break;
                 case "WiFi":
@@ -107,18 +102,16 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         reset();
     }
 
-
-
-    public void checkWin(int isWin, ChessType newChessType) {
+    private void checkWin(int isWin) {
         timer.cancel();
-        if (isWin == ChessType.BLACK.ordinal()) {
+        if (isWin == ChessType.WHITE.ordinal()) {
             winAlertDialogBulider.setMessage("White Win!");
             winAlertDialogBulider.create().show();
-        } else if (isWin == ChessType.WHITE.ordinal()) {
+        } else if (isWin == ChessType.BLACK.ordinal()) {
             winAlertDialogBulider.setMessage("Black Win!");
             winAlertDialogBulider.create().show();
         } else {
-            changeSide(newChessType);
+            changeSide(boardView.getChessType());
         }
     }
 
@@ -138,7 +131,6 @@ public class BoardActivity extends AppCompatActivity implements Observer {
             boardView.blockTouchEvent();
         }
     }
-
 
     private void changeSide(ChessType newChessType) {
         if (hasAgent) {
@@ -168,15 +160,26 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         }
     }
 
-
     @Override
-    public void update(Observable o, Object arg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                boardView.addChessToBoard(agent.getNextPosition());
-            }
-        });
+    public void update(Observable o, final Object arg) {
+        if (o instanceof BoardAgent) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    boardView.addChessToBoard(agent.getNextPosition());
+                }
+            });
+        } else if (o instanceof Board) {
+            final int isWin = (int) arg;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkWin(isWin);
+                }
+            });
+
+        }
+
     }
 
     @Override
