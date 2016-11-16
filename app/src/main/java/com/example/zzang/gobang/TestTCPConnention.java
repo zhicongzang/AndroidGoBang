@@ -115,28 +115,6 @@ public class TestTCPConnention extends BoardAgent {
     }
 
 
-
-    //    public static String getLocAddress() {
-//        String ipaddress = "";
-//
-//        try {
-//            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-//            while (en.hasMoreElements()) {
-//                NetworkInterface networks = en.nextElement();
-//                Enumeration<InetAddress> address = networks.getInetAddresses();
-//                while (address.hasMoreElements()) {
-//                    InetAddress ip = address.nextElement();
-//                    if (!ip.isLoopbackAddress() && ip instanceof Inet4Address) {
-//                        ipaddress = ip.getHostAddress();
-//                    }
-//                }
-//            }
-//        } catch (SocketException e) {
-//            e.printStackTrace();
-//        }
-//        return ipaddress;
-//    }
-
     public static String getWIFILocalIpAdress(Context mContext) {
         WifiManager wifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
         if (!wifiManager.isWifiEnabled()) {
@@ -147,6 +125,7 @@ public class TestTCPConnention extends BoardAgent {
         String ip = formatIpAddress(ipAddress);
         return ip;
     }
+
     private static String formatIpAddress(int ipAdress) {
 
         return (ipAdress & 0xFF ) + "." +
