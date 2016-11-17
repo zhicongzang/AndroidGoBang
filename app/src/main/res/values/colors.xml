@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="menuTextColor">#979797</color>
     <color name="menuTextChosenColor">#646464</color>
+    <color name="wifiBattleInfoBackground">#623d3d3d</color>
 </resources>

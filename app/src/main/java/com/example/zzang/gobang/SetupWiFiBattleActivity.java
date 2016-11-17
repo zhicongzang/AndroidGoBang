@@ -11,18 +11,22 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.example.zzang.gobang.controls.ButtomTextViewTouchListener;
+import com.example.zzang.gobang.controls.ButtonTextViewTouchListener;
 import com.example.zzang.gobang.model.WiFiGame;
 
 import java.io.IOException;
@@ -36,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SetupWiFiBattleActivity extends AppCompatActivity {
 
@@ -47,8 +53,10 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
     private ListView gameListView;
     private GameListAdapter gameListAdapter;
+    private EditText nameEditText;
+    private EditText IPAddressEditText;
     private String myIPAddress;
-    private String myName = "Jesse";
+    private String myName = "Player";
 
 
     private ServerSocket serverSocket;
@@ -60,7 +68,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
     private UpdateListViewHandler handler = new UpdateListViewHandler();
 
-    private Toast searchingToast;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +96,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
         });
 
         TextView reloadButton = (TextView) findViewById(R.id.reloadTextView);
-        reloadButton.setOnTouchListener(new ButtomTextViewTouchListener() {
+        reloadButton.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -99,7 +107,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             }
         });
         TextView createGameTextView = (TextView) findViewById(R.id.createGameTextView);
-        createGameTextView.setOnTouchListener(new ButtomTextViewTouchListener() {
+        createGameTextView.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -111,6 +119,54 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                 intent.putExtra("IPAddress",myIPAddress);
                 intent.putExtra("Name",myName);
                 startActivity(intent);
+            }
+        });
+        nameEditText = (EditText) findViewById(R.id.nameEditText);
+        nameEditText.setText(myName);
+        nameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    changeName();
+                    return true;
+                }
+
+                return true;
+            }
+        });
+        TextView changeNameTextView = (TextView)findViewById(R.id.changeNameTextView);
+        changeNameTextView.setOnTouchListener(new ButtonTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
+
+            @Override
+            public void touchUpHandle(View v) {
+                changeName();
+            }
+        });
+        IPAddressEditText = (EditText) findViewById(R.id.IPAddressEditText);
+        IPAddressEditText.setText(myIPAddress);
+        IPAddressEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    searchGame();
+                }
+                return false;
+            }
+        });
+        TextView searchTextView = (TextView)findViewById(R.id.searchTextView);
+        searchTextView.setOnTouchListener(new ButtonTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
+
+            @Override
+            public void touchUpHandle(View v) {
+                searchGame();
             }
         });
 
@@ -125,8 +181,8 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        searchingToast = Toast.makeText(getApplicationContext(),"Searching...",Toast.LENGTH_SHORT);
-        searchingToast.setGravity(Gravity.CENTER,0,200);
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER,0,250);
         startSearchingServer();
         searchWiFiGames();
     }
@@ -134,21 +190,12 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
     private void searchWiFiGames() {
         StopSearchingWiFiGames();
         searchingThreadPool = Executors.newFixedThreadPool(10);
-        searchingToast.show();
+        toast.setText("Searching...");
+        toast.show();
         String searchIPPrefix = myIPAddress.substring(0, myIPAddress.lastIndexOf(".")+1);
         for(int suffix=100; suffix<=225; suffix++) {
             final String searchIP = searchIPPrefix + String.valueOf(suffix);
             if (searchIP.equals(myIPAddress)) {
-                searchingThreadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Socket socket = new Socket("140.192.34.72", WIFI_GAMES_PORT);
-                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                            oos.writeObject(myIPAddress);
-                        } catch (IOException e) { }
-                    }
-                });
                 continue;
             }
             searchingThreadPool.execute(new Runnable() {
@@ -229,6 +276,84 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
     protected void onPause() {
         StopSearchingWiFiGames();
         super.onPause();
+    }
+
+    private void changeName() {
+        String name = nameEditText.getText().toString();
+        if (name.length() <= 6) {
+            myName = name;
+            toast.setText("Name changed.");
+            toast.show();
+        } else {
+            nameEditText.setText(myName);
+            toast.setText("Name must no longer than 6 chars..");
+            toast.show();
+        }
+        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+    }
+
+    private void searchGame() {
+        final String IPAddress = IPAddressEditText.getText().toString();
+        if (IPAddress.equals(myIPAddress)) {
+            toast.setText("This is your IP Address.");
+            toast.show();
+
+        } else if (SetupWiFiBattleActivity.isIP(IPAddress)) {
+            StopSearchingWiFiGames();
+            searchingThreadPool = Executors.newFixedThreadPool(10);
+            searchingThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Socket socket = new Socket(IPAddress, WIFI_GAMES_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(myIPAddress);
+                    } catch (IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.setText("Cannot find game.");
+                                toast.show();
+                            }
+                        });
+                    }
+                    while(!games.containsKey(IPAddress)){
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) { }
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(SetupWiFiBattleActivity.this, WiFiBattleInfoActivity.class);
+                            intent.putExtra("Game", games.get(IPAddress));
+                            intent.putExtra("IPAddress",myIPAddress);
+                            intent.putExtra("Name",myName);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+        } else {
+            IPAddressEditText.setText(myIPAddress);
+            toast.setText("Invalid IP Address.");
+            toast.show();
+        }
+        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(IPAddressEditText.getWindowToken(), 0);
+
+
+    }
+
+    private static boolean isIP(String addr) {
+        if(addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
+            return false;
+        }
+        String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
+        Pattern pat = Pattern.compile(rexp);
+        Matcher mat = pat.matcher(addr);
+        return mat.find();
     }
 
     class UpdateListViewHandler extends Handler {

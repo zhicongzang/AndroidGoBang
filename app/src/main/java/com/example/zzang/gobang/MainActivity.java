@@ -5,15 +5,11 @@ import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.alibaba.fastjson.JSON;
-import com.example.zzang.gobang.controls.ButtomTextViewTouchListener;
+import com.example.zzang.gobang.controls.ButtonTextViewTouchListener;
 import com.example.zzang.gobang.model.WiFiAgent;
-import com.example.zzang.gobang.model.WiFiGame;
 
 public class  MainActivity extends AppCompatActivity {
 
@@ -31,7 +27,7 @@ public class  MainActivity extends AppCompatActivity {
         final TextView textViewWiFiBattle = (TextView) findViewById(R.id.textViewWiFiBattle);
         final TextView textViewAbout = (TextView) findViewById(R.id.textViewAbout);
 
-        textViewVSAI.setOnTouchListener(new ButtomTextViewTouchListener() {
+        textViewVSAI.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -44,7 +40,7 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewVSPlayer.setOnTouchListener(new ButtomTextViewTouchListener() {
+        textViewVSPlayer.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -57,7 +53,7 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewWiFiBattle.setOnTouchListener(new ButtomTextViewTouchListener() {
+        textViewWiFiBattle.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -81,7 +77,7 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewAbout.setOnTouchListener(new ButtomTextViewTouchListener() {
+        textViewAbout.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();

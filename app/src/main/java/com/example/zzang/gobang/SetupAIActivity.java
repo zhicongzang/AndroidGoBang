@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.zzang.gobang.controls.ButtomTextViewTouchListener;
+import com.example.zzang.gobang.controls.ButtonTextViewTouchListener;
 
 public class SetupAIActivity extends AppCompatActivity {
 
@@ -22,7 +22,7 @@ public class SetupAIActivity extends AppCompatActivity {
         final RadioGroup levelRadioGroup = (RadioGroup)findViewById(R.id.AILevelRadioGroup);
         levelRadioGroup.check(R.id.normalLevelRadioButton);
         TextView startTextView = (TextView)findViewById(R.id.startTextView);
-        startTextView.setOnTouchListener(new ButtomTextViewTouchListener() {
+        startTextView.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
@@ -40,7 +40,7 @@ public class SetupAIActivity extends AppCompatActivity {
         });
 
         TextView backTextView = (TextView)findViewById(R.id.backTextView);
-        backTextView.setOnTouchListener(new ButtomTextViewTouchListener() {
+        backTextView.setOnTouchListener(new ButtonTextViewTouchListener() {
             @Override
             protected Resources resources() {
                 return getResources();
