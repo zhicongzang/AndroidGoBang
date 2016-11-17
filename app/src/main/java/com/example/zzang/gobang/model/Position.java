@@ -11,6 +11,8 @@ public class Position implements Serializable {
     private int col;
     private int row;
 
+    public Position() { }
+
 
     public Position(int col, int row) {
         this.col = col;

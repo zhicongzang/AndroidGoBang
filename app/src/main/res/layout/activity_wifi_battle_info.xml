@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/popLayout">
+
+    <LinearLayout
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Black"
+            android:textColor="@color/menuTextColor"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_width="100dp"
+            android:gravity="left"
+            android:layout_height="match_parent"
+            android:id="@+id/blackPlayerNameTextView" />
+
+        <TextView
+            android:text="VS."
+            android:textColor="@color/menuTextColor"
+
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="0.5"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:id="@+id/vs" />
+
+
+
+        <TextView
+            android:text="White"
+            android:textColor="@color/menuTextColor"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_width="100dp"
+            android:gravity="right"
+            android:layout_height="match_parent"
+            android:id="@+id/whitePlayerNameTextView" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/stone_black"
+            android:id="@+id/blackImageView"
+            android:visibility="invisible"/>
+
+        <Button
+            android:text="Start"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startButton"
+            android:visibility="invisible"/>
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/stone_white"
+            android:id="@+id/whiteImageView"
+            android:visibility="invisible"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

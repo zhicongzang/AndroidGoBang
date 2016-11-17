@@ -1,6 +1,7 @@
 package com.example.zzang.gobang;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.example.zzang.gobang.controls.ButtomTextViewTouchListener;
 import com.example.zzang.gobang.model.WiFiAgent;
+import com.example.zzang.gobang.model.WiFiGame;
 
 public class  MainActivity extends AppCompatActivity {
 
@@ -27,7 +31,12 @@ public class  MainActivity extends AppCompatActivity {
         final TextView textViewWiFiBattle = (TextView) findViewById(R.id.textViewWiFiBattle);
         final TextView textViewAbout = (TextView) findViewById(R.id.textViewAbout);
 
-        textViewVSAI.setOnTouchListener(new MenuTouchListener() {
+        textViewVSAI.setOnTouchListener(new ButtomTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
+
             @Override
             public void touchUpHandle(View v) {
                 Intent intent = new Intent(MainActivity.this, SetupAIActivity.class);
@@ -35,7 +44,12 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewVSPlayer.setOnTouchListener(new MenuTouchListener() {
+        textViewVSPlayer.setOnTouchListener(new ButtomTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
+
             @Override
             public void touchUpHandle(View v) {
                 Intent intent = new Intent(MainActivity.this, BoardActivity.class);
@@ -43,7 +57,11 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewWiFiBattle.setOnTouchListener(new MenuTouchListener() {
+        textViewWiFiBattle.setOnTouchListener(new ButtomTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
             @Override
             public void touchUpHandle(View v) {
                 if (IPAddress == null || IPAddress.equals("0.0.0.0")) {
@@ -63,7 +81,11 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
-        textViewAbout.setOnTouchListener(new MenuTouchListener() {
+        textViewAbout.setOnTouchListener(new ButtomTextViewTouchListener() {
+            @Override
+            protected Resources resources() {
+                return getResources();
+            }
             @Override
             public void touchUpHandle(View v) {
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
@@ -74,25 +96,4 @@ public class  MainActivity extends AppCompatActivity {
 
     }
 
-    abstract class MenuTouchListener implements View.OnTouchListener {
-
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView textView = (TextView) v;
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    ((TextView) v).setTextColor(getResources().getColor(R.color.menuTextChosenColor));
-                    break;
-                case MotionEvent.ACTION_UP:
-                    ((TextView) v).setTextColor(getResources().getColor(R.color.menuTextColor));
-                    touchUpHandle(v);
-                    break;
-
-            }
-            return true;
-        }
-
-        public void touchUpHandle(View v) {}
-    }
 }

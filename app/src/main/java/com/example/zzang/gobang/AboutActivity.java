@@ -1,10 +1,14 @@
 package com.example.zzang.gobang;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.zzang.gobang.controls.ButtomTextViewTouchListener;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -14,21 +18,14 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         TextView textViewReturn = (TextView) findViewById(R.id.textViewReturn);
 
-
-        textViewReturn.setOnTouchListener(new View.OnTouchListener() {
+        textViewReturn.setOnTouchListener(new ButtomTextViewTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                TextView textView = (TextView) v;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        ((TextView) v).setTextColor(getResources().getColor(R.color.menuTextChosenColor));
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        ((TextView) v).setTextColor(getResources().getColor(R.color.menuTextColor));
-                        finish();
-                        break;
-                }
-                return true;
+            protected Resources resources() {
+                return getResources();
+            }
+            @Override
+            public void touchUpHandle(View v) {
+                finish();
             }
         });
 
