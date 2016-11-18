@@ -1,0 +1,7 @@
+Request:
+Searching PORT:44444
+Start Game PORt:44444
+{"blackIPAddress":"140.192.34.72","blackPlayerName":"ZZC"} PORT:33333
+{"blackIPAddress":"75.102.236.83","blackPlayerName":"Player","whiteIPAddress":"140.192.34.72","whitePlayerName":"ZZC"} PORT:44444
+{"col":6,"row":8} PORT:22222
+Leave PORT:22222

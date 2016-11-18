@@ -2,4 +2,6 @@
     <string name="app_name">GoBang</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="about">GoBang is an abstract strategy board game. Also called Five in a Row, it is traditionally played with Go pieces (black and white stones) on a go board with 19x19 (15x15) intersections; however, because pieces are not moved or removed from the board, gomoku may also be played as a paper and pencil game. This game is known in several countries under different names. \n\nBlack plays first if white did not just win, and players alternate in placing a stone of their color on an empty intersection. The winner is the first player to get an unbroken row of five stones horizontally, vertically, or diagonally.</string>
+    <string name="searching_request">Searching</string>
+    <string name="start_request">Start Game</string>
 </resources>

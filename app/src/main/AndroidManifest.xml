@@ -40,7 +40,8 @@
         <activity
             android:name=".SetupWiFiBattleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
         <activity android:name=".WiFiBattleInfoActivity" android:screenOrientation="portrait"
             android:theme="@style/WiFiBattleInfoTheme"></activity>
     </application>

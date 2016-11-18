@@ -398,4 +398,9 @@ public class AI extends BoardAgent {
         int row = boardData.getLastPosition().getRow() + random.nextInt(3) - 1;
         return new Position(col, row);
     }
+
+    @Override
+    public void procressNextPosition() {
+
+    }
 }

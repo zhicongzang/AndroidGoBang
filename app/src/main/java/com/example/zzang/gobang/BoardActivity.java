@@ -15,6 +15,9 @@ import com.example.zzang.gobang.model.AI;
 import com.example.zzang.gobang.model.Board;
 import com.example.zzang.gobang.model.BoardAgent;
 import com.example.zzang.gobang.model.ChessType;
+import com.example.zzang.gobang.model.Position;
+import com.example.zzang.gobang.model.WiFiAgent;
+import com.example.zzang.gobang.model.WiFiGame;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -27,12 +30,14 @@ public class BoardActivity extends AppCompatActivity implements Observer {
     private BoardView boardView;
     private TextView blackTimeTextView;
     private TextView whiteTimeTextView;
+    private TextView blackLabel;
+    private TextView whiteLabel;
     private ImageView blackImageView;
     private ImageView whiteImageView;
     private SecondsCounter blackSecondsCounter = new SecondsCounter();
     private SecondsCounter whiteSecondsCounter = new SecondsCounter();
     private Timer timer = new Timer();
-    private AlertDialog.Builder winAlertDialogBulider;
+    private AlertDialog.Builder winAlertDialogBuilder;
 
     private BoardAgent agent;
     private boolean hasAgent = false;
@@ -44,23 +49,26 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         boardView = (BoardView) findViewById(R.id.boardView);
         blackTimeTextView = (TextView) findViewById(R.id.blackTimeTextView);
         whiteTimeTextView = (TextView) findViewById(R.id.whiteTimeTextView);
+        blackLabel = (TextView) findViewById(R.id.blackLabel);
+        whiteLabel = (TextView) findViewById(R.id.whiteLabel);
         blackImageView = (ImageView) findViewById(R.id.blackImageView);
         whiteImageView = (ImageView) findViewById(R.id.whiteImageView);
+
         boardView.post(new Runnable() {
             @Override
             public void run() {
                 boardView.setup(BoardActivity.this);
             }
         });
-        winAlertDialogBulider = new AlertDialog.Builder(BoardActivity.this);
-        winAlertDialogBulider.setPositiveButton("New Game", new DialogInterface.OnClickListener() {
+        winAlertDialogBuilder = new AlertDialog.Builder(BoardActivity.this);
+        winAlertDialogBuilder.setPositiveButton("New Game", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 reset();
             }
         });
-        winAlertDialogBulider.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+        winAlertDialogBuilder.setNegativeButton("Leave", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -79,9 +87,12 @@ public class BoardActivity extends AppCompatActivity implements Observer {
                     hasAgent = true;
                     break;
                 case "WiFi":
+                    WiFiGame game = intent.getParcelableExtra("Game");
                     int piece = intent.getIntExtra("OPPiece", 2);
-                    agent = new TestTCPConnention(piece, this);
+                    String destinationIP = piece == ChessType.BLACK.ordinal() ? game.getBlackIPAddress() : game.getWhiteIPAddress() ;
+                    agent = new WiFiAgent(piece, destinationIP, this);
                     hasAgent = true;
+                    setupView(game);
                     break;
                 default:
                     break;
@@ -102,14 +113,19 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         reset();
     }
 
+    private void setupView(WiFiGame game) {
+        blackLabel.setText(game.getBlackPlayerName());
+        whiteLabel.setText(game.getWhitePlayerName());
+    }
+
     private void checkWin(int isWin) {
         timer.cancel();
         if (isWin == ChessType.WHITE.ordinal()) {
-            winAlertDialogBulider.setMessage("White Win!");
-            winAlertDialogBulider.create().show();
+            winAlertDialogBuilder.setMessage("White Win!");
+            winAlertDialogBuilder.create().show();
         } else if (isWin == ChessType.BLACK.ordinal()) {
-            winAlertDialogBulider.setMessage("Black Win!");
-            winAlertDialogBulider.create().show();
+            winAlertDialogBuilder.setMessage("Black Win!");
+            winAlertDialogBuilder.create().show();
         } else {
             changeSide(boardView.getChessType());
         }
@@ -136,6 +152,7 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         if (hasAgent) {
             if (agent.getChessType().equals(newChessType)) {
                 boardView.blockTouchEvent();
+                agent.procressNextPosition();
             } else {
                 boardView.handleTouchEvent();
             }
@@ -163,14 +180,48 @@ public class BoardActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, final Object arg) {
         if (o instanceof BoardAgent) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    boardView.addChessToBoard(agent.getNextPosition());
+            if (arg != null && arg instanceof String) {
+                String s = (String)arg;
+                if(s.equals("Leave")) {
+                    ((WiFiAgent)agent).stopListening();
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BoardActivity.this);
+                    alertDialogBuilder.setPositiveButton("Continue game with AI", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            agent = new AI(agent.getChessType().ordinal(), 0, boardView.getBoardData(), BoardActivity.this);
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+                    alertDialogBuilder.setMessage("Your opponent has left.");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertDialogBuilder.create().show();
+                        }
+                    });
                 }
-            });
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boardView.addChessToBoard(agent.getNextPosition());
+                    }
+                });
+            }
+
         } else if (o instanceof Board) {
             final int isWin = (int) arg;
+            if (agent instanceof WiFiAgent) {
+                final Position position = boardView.getBoardData().getLastPosition();
+                ((WiFiAgent) agent).sendPosition(position);
+            }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -184,10 +235,10 @@ public class BoardActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void finish() {
-        super.finish();
-        if (agent instanceof TestTCPConnention) {
-            ((TestTCPConnention) agent).close();
+        if (agent instanceof WiFiAgent) {
+            ((WiFiAgent) agent).stopListening();
         }
+        super.finish();
     }
 
     class SecondsCounter {

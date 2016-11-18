@@ -2,6 +2,7 @@ package com.example.zzang.gobang.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -91,6 +92,14 @@ public class WiFiGame implements Parcelable {
 
     public void setWhitePlayerName(String whitePlayerName) {
         this.whitePlayerName = whitePlayerName;
+    }
+
+    public static boolean isComplete(WiFiGame game) {
+        return (game.blackPlayerName != null) && (game.whitePlayerName != null) && (game.blackIPAddress != null) && (game.whiteIPAddress != null);
+    }
+
+    public boolean compareGame(WiFiGame g) {
+        return (this.blackIPAddress.equals(g.getBlackIPAddress()) && this.blackPlayerName.equals(g.getBlackPlayerName()));
     }
 
     @Override

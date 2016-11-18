@@ -34,6 +34,7 @@ public abstract class BoardAgent extends Observable {
         return nextPosition;
     }
 
+
     protected void setNextPosition(Position nextPosition) {
         if (nextPosition != null) {
             this.nextPosition = nextPosition;
@@ -57,5 +58,7 @@ public abstract class BoardAgent extends Observable {
         Log.d("Pos", "testRandomNextPosition: "+ p.toString());
         setNextPosition(p);
     }
+
+    abstract public void procressNextPosition();
 
 }

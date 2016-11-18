@@ -39,10 +39,6 @@ public class Position implements Serializable {
         return "col: " + String.valueOf(col) + " row: " + String.valueOf(row);
     }
 
-    public String toDataString() {
-        return "col:" + String.valueOf(col) + ":row:" + String.valueOf(row);
-    }
-
     public Position(String s) {
         String[] ss = s.split(":");
         col = Integer.parseInt(ss[1]);

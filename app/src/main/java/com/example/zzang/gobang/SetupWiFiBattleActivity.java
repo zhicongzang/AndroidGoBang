@@ -60,7 +60,9 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
 
     private ServerSocket serverSocket;
+    // Ping local network thread pool
     private ExecutorService searchingThreadPool;
+    // Server thread pool
     private ExecutorService serverThreadPool;
 
     private boolean isListening = false;
@@ -147,7 +149,9 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             }
         });
         IPAddressEditText = (EditText) findViewById(R.id.IPAddressEditText);
-        IPAddressEditText.setText(myIPAddress);
+
+        IPAddressEditText.setText("140.192.34.72");
+        //IPAddressEditText.setText(myIPAddress);
         IPAddressEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -204,7 +208,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                     try {
                         Socket socket = new Socket(searchIP, WIFI_GAMES_PORT);
                         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.writeObject(myIPAddress);
+                        oos.writeObject(getResources().getString(R.string.searching_request));
                     } catch (IOException e) { }
                 }
             });
