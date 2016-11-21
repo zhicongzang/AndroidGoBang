@@ -25,6 +25,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,6 +53,7 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
     private ImageView whiteImageView;
     private ImageView blackImageView;
     private Button startButton;
+    private boolean isDebugMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +62,12 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
         startButton = (Button) findViewById(R.id.startButton);
 
         final LinearLayout popLayout = (LinearLayout)findViewById(R.id.popLayout);
-//        popLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                vaildRect = new Rect(0,0,popLayout.getWidth(),popLayout.getHeight());
-//            }
-//        });
 
         Intent intent = getIntent();
         myIPAddress = intent.getStringExtra("IPAddress");
         myName = intent.getStringExtra("Name");
         game = intent.getParcelableExtra("Game");
+        isDebugMode = intent.getBooleanExtra("DebugMode", false);
         // Create a new game or add a game
         if (game == null) {
             game = new WiFiGame(myIPAddress,myName);
@@ -85,9 +82,16 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                Socket socket = new Socket(game.getWhiteIPAddress(), WIFI_GAMES_PORT);
-                                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                                oos.writeObject(getResources().getString(R.string.start_request));
+                                if (isDebugMode) {
+                                    Socket socket = new Socket(myIPAddress, WIFI_GAMES_PORT);
+                                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                                    oos.writeObject(game.getWhiteIPAddress() + "@@@@" + getResources().getString(R.string.start_request));
+                                } else {
+                                    Socket socket = new Socket(game.getWhiteIPAddress(), WIFI_GAMES_PORT);
+                                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                                    oos.writeObject(getResources().getString(R.string.start_request));
+                                }
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -99,6 +103,10 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
                     intentToBoardActivity.putExtra("Game", game);
                     intentToBoardActivity.putExtra("Mode", "WiFi");
                     intentToBoardActivity.putExtra("OPPiece", ChessType.WHITE.ordinal());
+                    intentToBoardActivity.putExtra("DeBugMode", isDebugMode);
+                    if(isDebugMode) {
+                        intentToBoardActivity.putExtra("DebugModeIPAddress", myIPAddress);
+                    }
                     startActivity(intentToBoardActivity);
                     finish();
                 }
@@ -124,6 +132,9 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
         }
         serverThreadPool = Executors.newFixedThreadPool(2);
         startServer();
+        if (WiFiGame.isComplete(game)) {
+            addToGame();
+        }
     }
 
     private void setupView() {
@@ -159,9 +170,15 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
                         Log.d("Request", request);
                         if (request.equals(getResources().getString(R.string.searching_request))){
                             if (isVisible) {
-                                Socket socket = new Socket(recieveSocket.getInetAddress().getHostAddress(), SEARCH_WIFI_GAMES_PORT);
-                                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                                oos.writeObject(JSON.toJSONString(game));
+                                if (isDebugMode) {
+                                    Socket socket = new Socket(myIPAddress, SEARCH_WIFI_GAMES_PORT);
+                                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                                    oos.writeObject(recieveSocket.getInetAddress().getHostAddress() + "@@@@" + JSON.toJSONString(game));
+                                } else {
+                                    Socket socket = new Socket(recieveSocket.getInetAddress().getHostAddress(), SEARCH_WIFI_GAMES_PORT);
+                                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                                    oos.writeObject(JSON.toJSONString(game));
+                                }
                             }
                         } else if (request.equals(getResources().getString(R.string.start_request))) {
                             runOnUiThread(new Runnable() {
@@ -195,6 +212,30 @@ public class WiFiBattleInfoActivity extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
+    }
+
+    private void addToGame() {
+        serverThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (isDebugMode) {
+                        Socket socket = new Socket(myIPAddress, WIFI_GAMES_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(game.getBlackIPAddress() + "@@@@" + JSON.toJSONString(game));
+                    } else {
+                        Socket socket = new Socket(game.getBlackIPAddress(), WIFI_GAMES_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(JSON.toJSONString(game));
+                    }
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }

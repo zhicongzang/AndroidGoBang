@@ -20,13 +20,16 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.zzang.gobang.controls.ButtonTextViewTouchListener;
+import com.example.zzang.gobang.model.WiFiAgent;
 import com.example.zzang.gobang.model.WiFiGame;
 
 import java.io.IOException;
@@ -47,6 +50,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
     private final static int SEARCH_WIFI_GAMES_PORT = 33333;
     private final static int WIFI_GAMES_PORT = 44444;
+    private final static int DEBUG_PORT = 55555;
 
     private Map<String, WiFiGame> games;
     private List<String> IPAddressList;
@@ -57,6 +61,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
     private EditText IPAddressEditText;
     private String myIPAddress;
     private String myName = "Player";
+    private boolean isDebugMode = false;
 
 
     private ServerSocket serverSocket;
@@ -72,10 +77,14 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
     private Toast toast;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_wifi_battle);
+
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER,0,250);
 
         games = new HashMap<>();
         IPAddressList = new ArrayList<>();
@@ -93,6 +102,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                 intent.putExtra("Game", game);
                 intent.putExtra("IPAddress",myIPAddress);
                 intent.putExtra("Name",myName);
+                intent.putExtra("DebugMode", isDebugMode);
                 startActivity(intent);
             }
         });
@@ -120,6 +130,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                 Intent intent = new Intent(SetupWiFiBattleActivity.this, WiFiBattleInfoActivity.class);
                 intent.putExtra("IPAddress",myIPAddress);
                 intent.putExtra("Name",myName);
+                intent.putExtra("DebugMode", isDebugMode);
                 startActivity(intent);
             }
         });
@@ -150,8 +161,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
         });
         IPAddressEditText = (EditText) findViewById(R.id.IPAddressEditText);
 
-        IPAddressEditText.setText("140.192.34.72");
-        //IPAddressEditText.setText(myIPAddress);
+        IPAddressEditText.setText(myIPAddress);
         IPAddressEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -174,6 +184,32 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             }
         });
 
+        final Switch debugSwitch = (Switch) findViewById(R.id.deBugSwitch);
+        debugSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    if (!isDebugMode) {
+                        isDebugMode = true;
+                        getDebugIPAddress();
+                    }
+                } else {
+                    String ip = WiFiAgent.getWIFILocalIpAdress(getApplicationContext());
+                    if (ip != null && !ip.equals("0.0.0.0")) {
+                        myIPAddress = ip;
+                        isDebugMode = false;
+                    } else {
+                        toast.setText("Please open WiFi device to close Debug Mode.");
+                        toast.show();
+                    }
+                    debugSwitch.setChecked(true);
+                }
+            }
+        });
+        if (myIPAddress.equals("0.0.0.0")) {
+            debugSwitch.setChecked(true);
+        }
+
 
         searchingThreadPool = Executors.newFixedThreadPool(10);
         serverThreadPool = Executors.newFixedThreadPool(2);
@@ -185,14 +221,40 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER,0,250);
         startSearchingServer();
-        searchWiFiGames();
+    }
+
+    private void getDebugIPAddress () {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket sSocket = new ServerSocket(DEBUG_PORT);
+                    Socket socket = sSocket.accept();
+                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                    myIPAddress = (String) ois.readObject();
+                    Log.d("DEBUG IP", myIPAddress);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchWiFiGames();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void searchWiFiGames() {
         StopSearchingWiFiGames();
+        games.clear();
+        IPAddressList.clear();
+        handler.sendMessage(new Message());
         searchingThreadPool = Executors.newFixedThreadPool(10);
         toast.setText("Searching...");
         toast.show();
@@ -206,9 +268,15 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        Socket socket = new Socket(searchIP, WIFI_GAMES_PORT);
-                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.writeObject(getResources().getString(R.string.searching_request));
+                        if(isDebugMode) {
+                            Socket socket = new Socket(searchIP, WIFI_GAMES_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(myIPAddress + "@@@@" + getResources().getString(R.string.searching_request));
+                        } else {
+                            Socket socket = new Socket(searchIP, WIFI_GAMES_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(getResources().getString(R.string.searching_request));
+                        }
                     } catch (IOException e) { }
                 }
             });
@@ -254,8 +322,8 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
             }
             serverSocket.close();
         } catch (IOException e) {
-            serverThreadPool.shutdown();
-            searchingThreadPool.shutdown();
+            serverThreadPool.shutdownNow();
+            searchingThreadPool.shutdownNow();
             e.printStackTrace();
         }
     }
@@ -272,13 +340,15 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        searchWiFiGames();
+        if (!isDebugMode) {
+            searchWiFiGames();
+        }
         super.onStart();
     }
 
     @Override
     protected void onPause() {
-        StopSearchingWiFiGames();
+        stopSearchingServer();
         super.onPause();
     }
 
@@ -310,9 +380,16 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        Socket socket = new Socket(IPAddress, WIFI_GAMES_PORT);
-                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.writeObject(myIPAddress);
+                        if(isDebugMode) {
+                            Socket socket = new Socket(myIPAddress, WIFI_GAMES_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(IPAddress + "@@@@" + getResources().getString(R.string.searching_request));
+                        } else {
+                            Socket socket = new Socket(IPAddress, WIFI_GAMES_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(getResources().getString(R.string.searching_request));
+                        }
+
                     } catch (IOException e) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -334,6 +411,7 @@ public class SetupWiFiBattleActivity extends AppCompatActivity {
                             intent.putExtra("Game", games.get(IPAddress));
                             intent.putExtra("IPAddress",myIPAddress);
                             intent.putExtra("Name",myName);
+                            intent.putExtra("DebugMode", isDebugMode);
                             startActivity(intent);
                         }
                     });

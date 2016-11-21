@@ -29,12 +29,18 @@ public class WiFiAgent extends BoardAgent {
     private boolean isListening = false;
     private boolean isAccepting = false;
     private ExecutorService threadPool;
+    private boolean isDebugMode = false;
+    private String debugModeIPAddress;
 
 
-    public WiFiAgent(int piece, String destinationIPAddress ,Observer o) {
+    public WiFiAgent(int piece, String destinationIPAddress, boolean isDebugMode, String debugModeIPAddress, Observer o) {
         super(piece, o);
         threadPool = Executors.newFixedThreadPool(2);
         this.destinationIPAddress = destinationIPAddress;
+        this.isDebugMode = isDebugMode;
+        if (isDebugMode) {
+            this.debugModeIPAddress = debugModeIPAddress;
+        }
         try {
             serverSocket = new ServerSocket(PLAYING_PORT);
         } catch (IOException e) {
@@ -63,7 +69,7 @@ public class WiFiAgent extends BoardAgent {
                             } else {
                                 Position position = JSON.parseObject(request, Position.class);
                                 setNextPosition(position);
-                                isAccepting = false;
+                                //isAccepting = false;
                             }
                         }
                     } catch (Exception e) {
@@ -84,9 +90,15 @@ public class WiFiAgent extends BoardAgent {
                 @Override
                 public void run() {
                     try {
-                        Socket socket = new Socket(destinationIPAddress, PLAYING_PORT);
-                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.writeObject("Leave");
+                        if (isDebugMode) {
+                            Socket socket = new Socket(debugModeIPAddress, PLAYING_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(destinationIPAddress + "@@@@" + "Leave");
+                        } else {
+                            Socket socket = new Socket(destinationIPAddress, PLAYING_PORT);
+                            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject("Leave");
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -113,9 +125,15 @@ public class WiFiAgent extends BoardAgent {
             @Override
             public void run() {
                 try {
-                    sendSocket = new Socket(destinationIPAddress, PLAYING_PORT);
-                    ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
-                    oos.writeObject(JSON.toJSONString(position));
+                    if(isDebugMode) {
+                        sendSocket = new Socket(debugModeIPAddress, PLAYING_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+                        oos.writeObject(destinationIPAddress + "@@@@" + JSON.toJSONString(position));
+                    } else {
+                        sendSocket = new Socket(destinationIPAddress, PLAYING_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+                        oos.writeObject(JSON.toJSONString(position));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -125,7 +143,9 @@ public class WiFiAgent extends BoardAgent {
 
     @Override
     public void procressNextPosition() {
-        startAccepting();
+        if (!isAccepting) {
+            startAccepting();
+        }
     }
 
     public static String getWIFILocalIpAdress(Context mContext) {

@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -14,6 +15,9 @@ public class TestWiFi {
     private static final int GAME_PORT = 44444;
     private static final int SEARCH_PORT = 33333;
     private static final int PLAYING_PORT = 22222;
+    private static final int DEBUG_PORT = 55555;
+    private String toIP = "";
+
 
 
     public static void main(String[] args) throws Exception {
@@ -23,45 +27,52 @@ public class TestWiFi {
 
     private void start()  {
         try {
-            String ip;
+            String ip = "";
             Scanner sc = new Scanner(System.in);
-            System.out.println("IP address to Test: ");
-            ip = sc.nextLine();
+//            System.out.println("IP address to Test: ");
+//            ip = sc.nextLine();
             InetAddress ownIP=InetAddress.getLocalHost();
-            String myIP = ownIP.getHostAddress();
+            final String myIP = ownIP.getHostAddress();
             System.out.println("IP of my system is "+myIP);
             String s = "{\"blackIPAddress\":\""+ myIP +"\",\"blackPlayerName\":\"ZZC\"}";
             System.out.println("----------------------");
-            new ServerThread(GAME_PORT) {
+            new ServerThread(myIP,GAME_PORT) {
                 @Override
-                void toDo() {}
+                void toDo(String serverIP) {}
             }.start();
-            new ServerThread(SEARCH_PORT) {
+            new ServerThread(myIP,SEARCH_PORT) {
                 @Override
-                void toDo() {}
+                void toDo(String serverIP) {}
             }.start();
-            new ServerThread(PLAYING_PORT) {
+            new ServerThread(myIP,PLAYING_PORT) {
                 @Override
-                void toDo() {}
+                void toDo(String serverIP) {}
             }.start();
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Socket socket = new Socket("127.0.0.1", DEBUG_PORT);
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(myIP);
+                        System.out.println("Debug Mode Active!");
+                    } catch (IOException e) {
+                        System.out.println("Debug Mode Inactive!");
+                    }
+                }
+            }).start();
+
+
             while(true) {
-            	sc = new Scanner(System.in);
-            	System.out.println("Request: ");
-                String request = sc.nextLine();
                 System.out.println("Send Request To Port: ");
                 int port = sc.nextInt();
-                if (request != null || request.length() > 0) {
-                	try {
-                		Socket socket = new Socket(ip, port);
-                		ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                		oos.writeObject(request);
-                		System.out.println("Request send successfully.");
-                	} catch (Exception e) {
-            			e.printStackTrace();
-        			}
-                	
-                }
+                System.out.println("Request: ");
+                String request = sc.nextLine();
+                Socket socket = new Socket(ip, port);
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(request);
+                System.out.println("Request send successfully.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,8 +81,11 @@ public class TestWiFi {
 
     abstract class ServerThread extends Thread {
         private int port;
+        private String myIP;
+        
 
-        public ServerThread(int port) {
+        public ServerThread(String myIP, int port) {
+            this.myIP = myIP;
             this.port = port;
         }
 
@@ -88,8 +102,24 @@ public class TestWiFi {
                     Socket socket = serverSocket.accept();
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                     String info = (String) ois.readObject();
-                    System.out.println("Server Port: " + port + "    From IP: " + socket.getInetAddress().getHostAddress());
+                    String fromIP = socket.getInetAddress().getHostAddress();
+                    if((!fromIP.equals(myIP))&&(!fromIP.equals("127.0.0.1"))) {
+                        toIP = fromIP;
+                        System.out.println("Changed: " + toIP);
+                    }
+                    System.out.println("Server Port: " + port + "    From IP: " + fromIP);
                     System.out.println("Info: " + info);
+                    String[] strings = info.split("@@@@");
+                    if (strings.length > 1) {
+                        String ip = (strings[0].equals("127.0.0.1")||strings[0].equals(myIP)) ? toIP : strings[0];
+                        Socket sendSocket = new Socket(ip, port);
+                        ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+                        oos.writeObject(strings[1]);
+                    } else {
+                        Socket sendSocket = new Socket("127.0.0.1", port);
+                        ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+                        oos.writeObject(info);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -97,6 +127,6 @@ public class TestWiFi {
                 }
             }
         }
-        abstract void toDo();
+        abstract void toDo(String serverIP);
     }
 }

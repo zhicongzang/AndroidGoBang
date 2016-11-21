@@ -46,6 +46,7 @@ public class Board extends Observable {
 
     public void reset() {
         boardData = new int[15][15];
+        lastPosition = null;
     }
 
 

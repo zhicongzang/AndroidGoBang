@@ -60,7 +60,7 @@ public class  MainActivity extends AppCompatActivity {
             }
             @Override
             public void touchUpHandle(View v) {
-                if (IPAddress == null || IPAddress.equals("0.0.0.0")) {
+                if (IPAddress == null) {
                     IPAddress = WiFiAgent.getWIFILocalIpAdress(getApplicationContext());
                     Toast.makeText(getApplicationContext(),"Please connect a WiFi network.",Toast.LENGTH_SHORT).show();
                 } else {

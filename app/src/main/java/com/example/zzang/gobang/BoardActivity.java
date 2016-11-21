@@ -90,24 +90,18 @@ public class BoardActivity extends AppCompatActivity implements Observer {
                     WiFiGame game = intent.getParcelableExtra("Game");
                     int piece = intent.getIntExtra("OPPiece", 2);
                     String destinationIP = piece == ChessType.BLACK.ordinal() ? game.getBlackIPAddress() : game.getWhiteIPAddress() ;
-                    agent = new WiFiAgent(piece, destinationIP, this);
+                    boolean isDebugMode = intent.getBooleanExtra("DebugMode", false);
+                    String debugModeIPAddres = null;
+                    if (isDebugMode) {
+                        debugModeIPAddres = intent.getStringExtra("DebugModeIPAddres");
+                    }
+                    agent = new WiFiAgent(piece, destinationIP,isDebugMode, debugModeIPAddres, this);
                     hasAgent = true;
                     setupView(game);
                     break;
                 default:
                     break;
             }
-        }
-
-        // Test Anent
-        if (hasAgent) {
-            Button testAgentButton = (Button) findViewById(R.id.testAgentButton);
-            testAgentButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    agent.testRandomNextPosition();
-                }
-            });
         }
 
         reset();
@@ -145,6 +139,7 @@ public class BoardActivity extends AppCompatActivity implements Observer {
         blackImageView.setVisibility(View.VISIBLE);
         if (hasAgent && agent.getChessType().equals(ChessType.BLACK)) {
             boardView.blockTouchEvent();
+            agent.procressNextPosition();
         }
     }
 

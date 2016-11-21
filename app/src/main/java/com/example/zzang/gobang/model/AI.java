@@ -364,13 +364,24 @@ public class AI extends BoardAgent {
 
     }
 
+    private Position generateNearestPosition() {
+        int col = boardData.getLastPosition().getCol() + random.nextInt(3) - 1;
+        int row = boardData.getLastPosition().getRow() + random.nextInt(3) - 1;
+        return new Position(col, row);
+    }
+
     @Override
-    public void testRandomNextPosition() {
+    public void procressNextPosition() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Position originalPosition = boardData.getLastPosition();
                 if (originalPosition == null) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     setNextPosition(new Position(7,7));
                     return;
                 }
@@ -391,16 +402,5 @@ public class AI extends BoardAgent {
                 }
             }
         }).start();
-    }
-
-    private Position generateNearestPosition() {
-        int col = boardData.getLastPosition().getCol() + random.nextInt(3) - 1;
-        int row = boardData.getLastPosition().getRow() + random.nextInt(3) - 1;
-        return new Position(col, row);
-    }
-
-    @Override
-    public void procressNextPosition() {
-
     }
 }
